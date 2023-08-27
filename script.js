@@ -98,6 +98,7 @@ function showSearch(title) {
             let index = myLibrary.findIndex(x => x.book_id === e.target.className);
             console.log("this is" + index);
             deleteBook(index);
+            emptyResults();
         });
 
         const readButton = document.createElement('button');
@@ -110,6 +111,7 @@ function showSearch(title) {
             let index = myLibrary.findIndex(x => x.book_id === e.target.id);
             console.log(index)
             markRead(index);
+            showSearch(title);
         });
 
         let readornot = ""
@@ -127,10 +129,8 @@ function showSearch(title) {
 
         const resultTitle = document.createElement('h3');
         resultTitle.textContent = "---Result---";
-        if (searchResult.children.length > 0) {
-            searchResult.removeChild(searchResult.children[0]);
-            searchResult.removeChild(searchResult.children[0]);
-        }
+        
+        emptyResults();
         
         searchResult.appendChild(resultTitle);
 
@@ -145,8 +145,14 @@ function showSearch(title) {
 
 
     }
-        
 
+}
+
+function emptyResults() {
+    if (searchResult.children.length > 0) {
+        searchResult.removeChild(searchResult.children[0]);
+        searchResult.removeChild(searchResult.children[0]);
+    }
 }
 
 ////////////////////////////////////////////////////
