@@ -19,7 +19,8 @@ const publisherField = document.querySelector('.publisherinput');
 //get save book button
 const saveButton = document.querySelector('.savebutton');
 //add evenlistner to savebutton and get all the inputs above.
-saveButton.addEventListener('click',addBookToLibrary);
+//saveButton.addEventListener('submit',addBookToLibrary);
+addbookContainer.addEventListener('submit',addBookToLibrary);
 
 
 const addbookButton = document.querySelector('.addbookbutton');
@@ -27,21 +28,46 @@ const addbookButton = document.querySelector('.addbookbutton');
 addbookButton.addEventListener('click',function(){
 
     addbookContainer.style.display = "flex";
+    titleField.focus();
 })
-
-
 
 const searchButton = document.querySelector('.searchbutton');
-searchButton.addEventListener('click',function(){
-    const searchField = document.querySelector('.searchfield');
-    let searchedTitle = searchField.value;
+searchButton.addEventListener('click',Search)
+
+const searchField = document.querySelector('.searchfield');
+searchField.addEventListener('keypress',function(e){
+    if (e.key === 'Enter') {
+        Search();
+    }
 })
 
+function Search(e) {
 
-Book();
+    e.preventDefault();
+    
+    let searchedTitle = searchField.value;
+    let searchFlag = false;
+    
+    for (const value of myLibrary) {
+        if (searchedTitle === value.title) {
+            alert("We've found it");
+            searchFlag = true;
+        }
+    }
+
+    if (searchFlag === false) alert("No match found");
+}
+
+//I used to load Book() when I had values in MyLibrary from the get go.
+//Book();
 
 
 function Book() {
+
+    titleField.value = '';
+    authorField.value = '';
+    pagesField.value = '';
+    publisherField.value = '';
 
     let child = displayContainer.lastElementChild;
     while (child) {
@@ -57,22 +83,35 @@ function Book() {
         deleteButton.innerText = "Remove Book";
         deleteButton.className = `${book.book_id}`
         deleteButton.addEventListener('click',(e)=>{
-            deleteBook(parseInt(readButton.className));
+            console.log(e.target.className)
+            let index = myLibrary.findIndex(x => x.book_id === e.target.className);
+            console.log("this is" + index);
+            deleteBook(index);
         });
 
         const readButton = document.createElement('button');
         readButton.innerText = "Already Read";
         readButton.id = `${book.book_id}`
         readButton.addEventListener('click',(e)=>{
-            markRead(parseInt(e.target.id));
+            //I will need to pass the index of this instead of id.
+            //markRead(parseInt(e.target.id));
+            console.log(e.target)
+            let index = myLibrary.findIndex(x => x.book_id === e.target.id);
+            console.log(index)
+            markRead(index);
         });
+
+        let readornot = ""
+        if (book.read === true) readornot = "Yes";
+        else readornot = "No";
 
         bookImage.src = 'https://kpop-star.net/en/wp-content/uploads/2023/02/hanni%E3%80%80profile4.jpg'
         bookDisplay.innerText = `ID:  ${book.book_id}
                                 Title:  ${book.title}
                                 Author:  ${book.author}
                                 Nom. of Pages:  ${book.pages}
-                                Publisher:  ${book.publisher}`
+                                Publisher:  ${book.publisher}
+                                Read it?: ${readornot}`
         ;
         bookDisplay.className = "bookcard";
         displayContainer.appendChild(bookDisplay);
@@ -83,28 +122,48 @@ function Book() {
 
 }
 
-function addBookToLibrary() {
+function addBookToLibrary(e) {
+    
+    e.preventDefault();    
 
-    myLibrary.push({
-        book_id: `${bookCount}`,
-        title: `${titleField.value}`,author: `${authorField.value}`,
-        pages:`${pagesField.value}`, publisher:`${publisherField.value}`,
-        });
-    bookCount ++;
+    let showFlag = true; 
+    
+    for (const value of myLibrary) {
+        if (titleField.value === value.title) {
+            showFlag = false;
+        }
+    }
 
-    Book();
+    if (showFlag === true) {
+
+        myLibrary.push({
+            book_id: `${bookCount}`,
+            title: `${titleField.value}`,author: `${authorField.value}`,
+            pages:`${pagesField.value}`, publisher:`${publisherField.value}`,
+            });
+        bookCount ++;
+        addbookContainer.style.display = "none";
+        Book();
+    } else {
+        alert("NOOOOOOO");
+    }       
+
+
 }
 
-function deleteBook(number) {
+function deleteBook(index) {
 
-    myLibrary.splice(number-1,1);
+    myLibrary.splice(index,1);
+    console.log(myLibrary)
     Book();
     
 }
 
-function markRead(readNumber) {
+function markRead(index) {
 
-    myLibrary[readNumber-1].read = true;
-    console.log(myLibrary[readNumber-1].read)
+    
+    myLibrary[index].read = true;
+    console.log(myLibrary[index].read)
+    Book();
 }
 

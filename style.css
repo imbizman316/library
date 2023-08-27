@@ -2,6 +2,38 @@ body {
     background-color: whitesmoke;
 }
 
+.title {
+    font-size:x-large;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: grey;
+    color: white;
+    height: 50px;
+    text-align: center;
+    padding: 10px;
+    margin: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search_addContainer {
+    padding: 20px;
+    margin: 30px;
+    display: flex;
+    border: solid black 1px;
+    justify-content: space-between;
+}
+
+.savebookContainer {
+    padding: 20px;
+    margin: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .addbookcontainer {
     display: none;
     flex-direction: column;
@@ -9,18 +41,31 @@ body {
 }
 
 .bookshelves {
-    display: flex;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    background-color: #fff;
+    color: #444;
 }
 
 .bookcard {
-    height: 200px;
-    width: 300px;
+    /* height: 200px; */
+    /* width: 500px; */
     border: black solid 2px;
-    text-align: center;
+    border-radius: 5px;
+    text-align: left;
     display: flex;
-    padding: 10px;
+    padding: 20px;
 }
 
 img {
     height: 200px;
+}
+
+input:invalid {
+    box-shadow: 0 0 5px 1px red;
+}
+
+input:focus:invalid {
+    box-shadow: none;
 }
