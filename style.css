@@ -48,6 +48,11 @@ body {
     color: #444;
 }
 
+.searchResult {
+    border: solid 1px pink;
+    margin: 10px;
+}
+
 .bookcard {
     /* height: 200px; */
     /* width: 500px; */
