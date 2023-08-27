@@ -9,6 +9,7 @@ let bookCount = 1;
 
 const displayContainer = document.querySelector('.bookshelves');
 const addbookContainer = document.querySelector('.addbookcontainer');
+const searchResult = document.querySelector('.searchResult');
 
 //get all the input field
 const titleField = document.querySelector('.titleinput');
@@ -37,7 +38,7 @@ searchButton.addEventListener('click',Search)
 const searchField = document.querySelector('.searchfield');
 searchField.addEventListener('keypress',function(e){
     if (e.key === 'Enter') {
-        Search();
+        Search(e);
     }
 })
 
@@ -56,10 +57,110 @@ function Search(e) {
     }
 
     if (searchFlag === false) alert("No match found");
+    else {
+        showSearch(searchedTitle);
+    }
 }
 
 //I used to load Book() when I had values in MyLibrary from the get go.
 //Book();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function showSearch(title) {
+    console.log(title);
+
+
+
+
+
+
+
+
+
+
+
+
+
+    for (const book of myLibrary) {
+
+        if (book.title === title) {
+
+            const bookDisplay = document.createElement('div');
+        const bookImage = document.createElement('img');
+
+        const deleteButton = document.createElement('button');
+        deleteButton.innerText = "Remove Book";
+        deleteButton.className = `${book.book_id}`
+        deleteButton.addEventListener('click',(e)=>{
+            console.log(e.target.className)
+            let index = myLibrary.findIndex(x => x.book_id === e.target.className);
+            console.log("this is" + index);
+            deleteBook(index);
+        });
+
+        const readButton = document.createElement('button');
+        readButton.innerText = "Already Read";
+        readButton.id = `${book.book_id}`
+        readButton.addEventListener('click',(e)=>{
+            //I will need to pass the index of this instead of id.
+            //markRead(parseInt(e.target.id));
+            console.log(e.target)
+            let index = myLibrary.findIndex(x => x.book_id === e.target.id);
+            console.log(index)
+            markRead(index);
+        });
+
+        let readornot = ""
+        if (book.read === true) readornot = "Yes";
+        else readornot = "No";
+
+        bookImage.src = 'https://kpop-star.net/en/wp-content/uploads/2023/02/hanni%E3%80%80profile4.jpg'
+        bookDisplay.innerText = `ID:  ${book.book_id}
+                                Title:  ${book.title}
+                                Author:  ${book.author}
+                                Nom. of Pages:  ${book.pages}
+                                Publisher:  ${book.publisher}
+                                Read it?: ${readornot}`
+        ;
+
+        const resultTitle = document.createElement('h3');
+        resultTitle.textContent = "---Result---";
+        if (searchResult.children.length > 0) {
+            searchResult.removeChild(searchResult.children[0]);
+            searchResult.removeChild(searchResult.children[0]);
+        }
+        
+        searchResult.appendChild(resultTitle);
+
+        bookDisplay.className = "bookcard";
+        searchResult.appendChild(bookDisplay);
+        bookDisplay.appendChild(bookImage);
+        bookDisplay.appendChild(readButton);
+        bookDisplay.appendChild(deleteButton);
+
+        
+    }
+
+
+    }
+        
+
+}
+
+////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
 
 
 function Book() {
@@ -71,6 +172,7 @@ function Book() {
 
     let child = displayContainer.lastElementChild;
     while (child) {
+        //console.log(child);
         displayContainer.removeChild(child);
         child = displayContainer.lastElementChild;
     }
